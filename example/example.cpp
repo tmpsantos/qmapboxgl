@@ -4,10 +4,10 @@
 QString getStyle() {
     static unsigned currentStyle;
     const char *styles[] {
-        "/usr/share/mbgl/styles/emerald-v7.json",
-        "/usr/share/mbgl/styles/mapbox-streets-v7.json",
-        "/usr/share/mbgl/styles/light-v7.json",
-        "/usr/share/mbgl/styles/dark-v7.json",
+        ":/emerald-v7.json",
+        ":/mapbox-streets-v7.json",
+        ":/light-v7.json",
+        ":/dark-v7.json",
     };
 
     if (currentStyle >= sizeof(styles) / sizeof(char *)) {

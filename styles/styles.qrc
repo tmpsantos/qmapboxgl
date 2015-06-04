@@ -1,0 +1,8 @@
+<RCC>
+    <qresource>
+        <file>dark-v7.json</file>
+        <file>emerald-v7.json</file>
+        <file>light-v7.json</file>
+        <file>mapbox-streets-v7.json</file>
+    </qresource>
+</RCC>

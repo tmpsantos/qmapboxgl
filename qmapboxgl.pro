@@ -13,4 +13,6 @@ SOURCES += example/example.cpp \
 
 HEADERS += include/qmapboxgl.h
 
+RESOURCES += styles/styles.qrc
+
 INCLUDEPATH += include
