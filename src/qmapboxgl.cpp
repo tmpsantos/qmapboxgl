@@ -115,9 +115,13 @@ void QMapboxGL::wheelEvent(QWheelEvent *ev)
 
 void QMapboxGL::resizeGL(int w, int h)
 {
+#ifdef Q_OS_LINUX
     // FIXME: Find out why sprites don't get rendered
     // correctly if I use 1.0 here.
-    d_ptr->map.resize(w, h, 1.00001);
+    d_ptr->map.resize(w, h, devicePixelRatio() + .00001);
+#else
+    d_ptr->map.resize(w, h, devicePixelRatio());
+#endif
 }
 
 QMapboxGLPrivate::QMapboxGLPrivate(QMapboxGL *q)
