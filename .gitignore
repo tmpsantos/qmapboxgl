@@ -1,3 +1,5 @@
 Makefile
 build
 *.o
+mason_packages
+.qmake.stash
