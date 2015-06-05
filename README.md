@@ -6,7 +6,7 @@ QMapboxGL is a Qt-enabled viewport for vector tiles using [Mapbox GL](https://gi
 
 A simple example rendering the Mapbox base vector tiles layer based on [OpenStreetMap](http://www.openstreetmap.org) using different styles.
 
-![](https://cloud.githubusercontent.com/assets/996307/7917024/febef546-088f-11e5-8484-f085b10eb547.gif)
+![](https://i.imgur.com/IQd3k8i.gif)
 
 ### Sample code
 
