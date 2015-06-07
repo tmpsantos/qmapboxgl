@@ -3,3 +3,4 @@ build
 *.o
 mason_packages
 .qmake.stash
+qmapboxgl.app
