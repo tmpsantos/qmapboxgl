@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 ```
 $ sudo apt-add-repository ppa:tmpsantos/mapbox-gl
 $ sudo apt-get update
-$ sudo apt-install libmbgl-dev
+$ sudo apt-get install libmbgl-dev
 ```
 ##### Clone this repository and build:
 
