@@ -44,7 +44,8 @@ PKGCONFIG += libmbgl
 SOURCES += example/example.cpp \
            src/qmapboxgl.cpp
 
-HEADERS += include/qmapboxgl.h
+HEADERS += include/qmapboxgl.h \
+           src/qmapboxgl_p.h
 
 RESOURCES += styles/styles.qrc
 
