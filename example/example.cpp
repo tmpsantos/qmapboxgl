@@ -8,6 +8,7 @@ QString getStyle() {
         ":/mapbox-streets-v7.json",
         ":/light-v7.json",
         ":/dark-v7.json",
+        ":/satellite-v7.json",
     };
 
     if (currentStyle >= sizeof(styles) / sizeof(char *)) {

@@ -4,5 +4,6 @@
         <file>emerald-v7.json</file>
         <file>light-v7.json</file>
         <file>mapbox-streets-v7.json</file>
+        <file>satellite-v7.json</file>
     </qresource>
 </RCC>
