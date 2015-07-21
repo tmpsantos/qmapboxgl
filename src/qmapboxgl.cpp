@@ -115,7 +115,7 @@ void QMapboxGL::wheelEvent(QWheelEvent *ev)
 
 void QMapboxGL::resizeGL(int w, int h)
 {
-    d_ptr->size = { static_cast<uint16_t>(w), static_cast<uint16_t>(h) };
+    d_ptr->size = {{ static_cast<uint16_t>(w), static_cast<uint16_t>(h) }};
     d_ptr->mapObj.update(mbgl::Update::Dimensions);
 }
 
