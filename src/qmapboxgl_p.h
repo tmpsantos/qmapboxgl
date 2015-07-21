@@ -2,7 +2,6 @@
 #define QMAPBOXGL_P_H
 
 #include <QObject>
-#include <QScopedPointer>
 
 #include <mbgl/map/map.hpp>
 #include <mbgl/map/view.hpp>
@@ -15,21 +14,20 @@ class FileSource;
 
 }  // namespace mbgl
 
-class QOpenGLContext;
+class QGLContext;
 
 class QMapboxGLPrivate : public QObject, public mbgl::View
 {
     Q_OBJECT
 
 public:
-    explicit QMapboxGLPrivate(QMapboxGL *q);
+    explicit QMapboxGLPrivate(QGLContext *context, QMapboxGL *q);
     virtual ~QMapboxGLPrivate();
 
     // mbgl::View implementation.
     float getPixelRatio() const override;
     std::array<uint16_t, 2> getSize() const override;
     std::array<uint16_t, 2> getFramebufferSize() const override;
-    void initialize(mbgl::Map *map) override;
     void activate() override;
     void deactivate() override;
     void notify() override;
@@ -41,7 +39,8 @@ public:
 
     std::array<uint16_t, 2> size;
 
-    QScopedPointer<QOpenGLContext> context;
+    bool contextIsCurrent;
+    QGLContext *context;
 
     mbgl::DefaultFileSource fileSourceObj;
     mbgl::Map mapObj;

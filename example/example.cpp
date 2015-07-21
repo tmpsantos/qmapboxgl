@@ -2,6 +2,8 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QGLContext>
+#include <QGLFormat>
 #include <QPushButton>
 #include <QTextStream>
 #include <QVBoxLayout>
@@ -84,7 +86,16 @@ int main(int argc, char **argv)
 
     QVBoxLayout *layout = new QVBoxLayout;
 
-    QMapboxGL *map = new QMapboxGL;
+    QGLFormat format;
+    format.setRedBufferSize(8);
+    format.setGreenBufferSize(8);
+    format.setBlueBufferSize(8);
+    format.setStencilBufferSize(8);
+    format.setAlphaBufferSize(8);
+    format.setDepthBufferSize(16);
+    format.setDoubleBuffer(true);
+
+    QMapboxGL *map = new QMapboxGL(new QGLContext(format));
     layout->addWidget(map);
 
     MapController mapController(map);

@@ -1,11 +1,12 @@
 #ifndef QMAPBOXGL_H
 #define QMAPBOXGL_H
 
-#include <QOpenGLWindow>
+#include <QGLWidget>
 
+class QGLContext;
 class QMapboxGLPrivate;
 
-class QMapboxGL : public QOpenGLWindow
+class QMapboxGL : public QGLWidget
 {
     Q_OBJECT
     Q_PROPERTY(double latitude READ latitude WRITE setLatitude)
@@ -13,7 +14,7 @@ class QMapboxGL : public QOpenGLWindow
     Q_PROPERTY(double zoom READ zoom WRITE setZoom)
 
 public:
-    explicit QMapboxGL(QWindow *parent = 0);
+    explicit QMapboxGL(QGLContext *context, QWidget *parent = 0);
     virtual ~QMapboxGL();
 
     void setAccessToken(const QString &token);

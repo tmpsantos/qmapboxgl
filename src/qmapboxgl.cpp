@@ -1,27 +1,19 @@
 #include "qmapboxgl.h"
 #include "qmapboxgl_p.h"
 
+#include <QGLContext>
 #include <QMouseEvent>
-#include <QOpenGLContext>
 #include <QWheelEvent>
 
 #include <mbgl/map/map.hpp>
 #include <mbgl/platform/gl.hpp>
 #include <mbgl/storage/default_file_source.hpp>
 
-QMapboxGL::QMapboxGL(QWindow *parent)
-    : QOpenGLWindow(QOpenGLWindow::NoPartialUpdate, parent)
-    , d_ptr(new QMapboxGLPrivate(this))
+QMapboxGL::QMapboxGL(QGLContext *context, QWidget *parent)
+    : QGLWidget(context, parent)
+    , d_ptr(new QMapboxGLPrivate(context, this))
 {
-    QSurfaceFormat format;
-    format.setRedBufferSize(8);
-    format.setGreenBufferSize(8);
-    format.setBlueBufferSize(8);
-    format.setStencilBufferSize(8);
-    format.setAlphaBufferSize(8);
-    format.setDepthBufferSize(16);
-
-    setFormat(format);
+    context->create();
 }
 
 QMapboxGL::~QMapboxGL()
@@ -102,9 +94,9 @@ void QMapboxGL::mouseMoveEvent(QMouseEvent *ev)
 
 void QMapboxGL::wheelEvent(QWheelEvent *ev)
 {
-    QPoint numDegrees = ev->angleDelta();
+    int numDegrees = ev->delta() / 8;
 
-    if (numDegrees.y() > 0) {
+    if (numDegrees > 0) {
         d_ptr->mapObj.scaleBy(1.10, ev->x(), ev->y());
     } else {
         d_ptr->mapObj.scaleBy(0.90, ev->x(), ev->y());
@@ -119,8 +111,10 @@ void QMapboxGL::resizeGL(int w, int h)
     d_ptr->mapObj.update(mbgl::Update::Dimensions);
 }
 
-QMapboxGLPrivate::QMapboxGLPrivate(QMapboxGL *q)
-    : fileSourceObj(nullptr)
+QMapboxGLPrivate::QMapboxGLPrivate(QGLContext *context_, QMapboxGL *q)
+    : contextIsCurrent(false)
+    , context(context_)
+    , fileSourceObj(nullptr)
     , mapObj(*this, fileSourceObj)
     , q_ptr(q)
 {
@@ -146,14 +140,13 @@ std::array<uint16_t, 2> QMapboxGLPrivate::getFramebufferSize() const
     return size;
 }
 
-void QMapboxGLPrivate::initialize(mbgl::Map *map_)
-{
-    View::initialize(map_);
-}
-
 void QMapboxGLPrivate::activate()
 {
     // Map thread
+    //mbgl::gl::InitializeExtensions([](const char *name) {
+    //    const QGLContext *thisContext = QGLContext::currentContext();
+    //    return thisContext->getProcAddress(name);
+    //});
 }
 
 void QMapboxGLPrivate::deactivate()
@@ -170,20 +163,9 @@ void QMapboxGLPrivate::notify()
 void QMapboxGLPrivate::invalidate()
 {
     // Map thread
-    if (!q_ptr->isExposed()) {
-        return;
-    }
-
-    if (!context) {
-        context.reset(new QOpenGLContext());
-        context->setFormat(q_ptr->requestedFormat());
-        context->create();
-        context->makeCurrent(q_ptr);
-
-        mbgl::gl::InitializeExtensions([](const char *name) {
-            QOpenGLContext *thisContext = QOpenGLContext::currentContext();
-            return thisContext->getProcAddress(name);
-        });
+    if (!contextIsCurrent) {
+        context->makeCurrent();
+        contextIsCurrent = true;
     }
 
     emit viewInvalidated();
@@ -192,7 +174,7 @@ void QMapboxGLPrivate::invalidate()
 void QMapboxGLPrivate::swap()
 {
     // Map thread
-    context->swapBuffers(q_ptr);
+    context->swapBuffers();
 }
 
 void QMapboxGLPrivate::triggerRender() {
