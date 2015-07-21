@@ -4,11 +4,13 @@ SQLITE_VERSION=3.8.8.1
 
 SUBDIRS = example
 
-QT += widgets
-
 TEMPLATE = app
 
-CONFIG += link_pkgconfig opengl c++11 debug
+QT += opengl
+
+CONFIG += link_pkgconfig debug
+
+QMAKE_CXXFLAGS += -std=c++11
 
 macx {
     !system(which mason >/dev/null) {
@@ -44,7 +46,8 @@ PKGCONFIG += libmbgl
 SOURCES += example/example.cpp \
            src/qmapboxgl.cpp
 
-HEADERS += include/qmapboxgl.h \
+HEADERS += example/example.h \
+           include/qmapboxgl.h \
            src/qmapboxgl_p.h
 
 RESOURCES += styles/styles.qrc
