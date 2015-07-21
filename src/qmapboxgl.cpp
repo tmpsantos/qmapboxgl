@@ -120,11 +120,13 @@ void QMapboxGL::resizeGL(int w, int h)
 }
 
 QMapboxGLPrivate::QMapboxGLPrivate(QMapboxGL *q)
-    : fileSourceObj(nullptr)
+    : isAnimating(false)
+    , fileSourceObj(nullptr)
     , mapObj(*this, fileSourceObj)
     , q_ptr(q)
 {
     connect(this, SIGNAL(viewInvalidated(void)), this, SLOT(triggerRender()), Qt::QueuedConnection);
+    connect(q_ptr, &QMapboxGL::stateChanged, this, &QMapboxGLPrivate::onStateChanged);
 }
 
 QMapboxGLPrivate::~QMapboxGLPrivate()
@@ -196,7 +198,14 @@ void QMapboxGLPrivate::swap()
 }
 
 void QMapboxGLPrivate::triggerRender() {
-    mapObj.renderSync();
+    bool needsRerender = mapObj.renderSync();
+    if (!isAnimating) {
+        mapObj.nudgeTransitions(needsRerender);
+    }
+}
+
+void QMapboxGLPrivate::onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State) {
+    isAnimating = newState == QAbstractAnimation::Running;
 }
 
 #include "moc_qmapboxgl_p.cpp"

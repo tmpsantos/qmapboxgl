@@ -1,5 +1,6 @@
 #include <QtWidgets>
 #include <QMapboxGL>
+#include <QAbstractAnimation>
 
 QString getStyle() {
     static unsigned currentStyle;
@@ -48,13 +49,16 @@ int main(int argc, char **argv) {
     QPropertyAnimation latitudeAnimation(map, "latitude");
     latitudeAnimation.setEasingCurve(QEasingCurve::OutQuint);
     latitudeAnimation.setDuration(5000);
+    QObject::connect(&latitudeAnimation, &QAbstractAnimation::stateChanged, map, &QMapboxGL::stateChanged);
 
     QPropertyAnimation longitudeAnimation(map, "longitude");
     longitudeAnimation.setEasingCurve(QEasingCurve::OutQuint);
     longitudeAnimation.setDuration(5000);
+    QObject::connect(&longitudeAnimation, &QAbstractAnimation::stateChanged, map, &QMapboxGL::stateChanged);
 
     QPropertyAnimation zoomAnimation(map, "zoom");
     zoomAnimation.setDuration(5000);
+    QObject::connect(&zoomAnimation, &QAbstractAnimation::stateChanged, map, &QMapboxGL::stateChanged);
 
     QPushButton *jumpButton = new QPushButton("&Take me to Helsinki");
     layout->addWidget(jumpButton);

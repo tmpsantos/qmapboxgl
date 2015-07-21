@@ -2,6 +2,7 @@
 #define QMAPBOXGL_H
 
 #include <QOpenGLWindow>
+#include <QAbstractAnimation>
 
 class QMapboxGLPrivate;
 
@@ -27,6 +28,9 @@ public:
 
     double zoom() const;
     void setZoom(double zoom);
+
+signals:
+    void stateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
 private:
     Q_DISABLE_COPY(QMapboxGL)

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QScopedPointer>
+#include <QAbstractAnimation>
 
 #include <mbgl/map/map.hpp>
 #include <mbgl/map/view.hpp>
@@ -41,6 +42,8 @@ public:
 
     std::array<uint16_t, 2> size;
 
+    bool isAnimating;
+
     QScopedPointer<QOpenGLContext> context;
 
     mbgl::DefaultFileSource fileSourceObj;
@@ -53,6 +56,7 @@ signals:
 
 public slots:
     void triggerRender();
+    void onStateChanged(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 };
 
 #endif // QMAPBOXGL_P_H
